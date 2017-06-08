@@ -1,14 +1,66 @@
 <ion-header>
   <ion-navbar>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="onLoadSettings()">
+        <ion-icon name="settings"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>
-      Ionic Blank
+      Tip Calculator
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <ion-item>
+    <ion-label>Subtotal</ion-label>
+    <ion-input type="string" [(ngModel)]="subtotalString" (ngModelChange)="onSubtotalChange($event)" clearInput></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <div class="button-bar">
+      <label>Tax</label>
+      <button ion-button
+        *ngFor="let tax of taxes; let i = index"
+        (click)="setActiveTax(i)"
+        [outline]="i != activeTax"
+        class="button">
+        {{tax | number:'1.2-2'}}
+      </button>
+      <label type="number" ion-label style="float: right">{{taxAmount | number:'1.2-2'}}</label>
+    </div>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Total</ion-label>
+    <ion-input type="string" [(ngModel)]="totalString" (ngModelChange)="onTotalChange($event)" clearInput></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <div class="button-bar">
+      <label>Tip</label>
+      <button ion-button
+        *ngFor="let tip of tips; let i = index"
+        (click)="setActiveTip(i)"
+        [outline]="i != activeTip"
+        class="button">
+        {{tip}}
+      </button>
+      <label ion-label style="float: right">{{tipAmount | number:'1.2-2'}}</label>
+    </div>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Amount due</ion-label>
+    <ion-label right>{{amountDue | number:'1.2-2'}}</ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Persons: {{persons}} </ion-label>
+    <ion-range [(ngModel)]="persons" (ngModelChange)="onPersonsChange()"
+      min=2 max=10 snaps>
+    </ion-range>
+    <ion-label right>{{perPersonAmount}}</ion-label>
+  </ion-item>
+
 </ion-content>

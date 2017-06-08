@@ -1,0 +1,51 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Settings</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form name="taxForm" (ngSubmit)="addTax(g.value); g.reset();" #g="ngForm">
+    <div class="button-bar">
+      <label>Tax</label>
+      <button ion-button
+        type = "button"
+        *ngFor="let tax of taxes; let i = index"
+        (click)="setActiveTax(i)"
+        [outline]="i != activeTax">
+        {{tax}}
+      </button>
+    </div>
+    <div>
+      <ion-input type="number" name="percentage" ngModel required></ion-input>
+      <button ion-button type="submit" [disabled]="g.invalid">Add tax</button>
+    </div>
+    <button ion-button type="reset" (click)="clearTaxes()">Clear taxes</button>
+  </form>
+
+  <form name="tipForm" (ngSubmit)="addTip(f.value); f.reset();" #f="ngForm">
+    <div class="button-bar">
+      <label>Tip</label>
+      <button ion-button
+        type="button"
+        *ngFor="let tip of tips; let i = index;"
+        (click)="setActiveTip(i)"
+        [outline]="i != activeTip">
+        {{tip}}
+      </button>
+    </div>
+    <div>
+      <ion-input type="number" name="percentage" ngModel required></ion-input>
+      <button ion-button type="submit" [disabled]="f.invalid">Add tip</button>
+    </div>
+    <button ion-button type="reset" (click)="clearTips()">Clear tips</button>
+  </form>
+
+  <div>
+    <button ion-button (click)="saveSettings()">Save</button>
+    <button ion-button (click)="back()">Cancel</button>
+  </div>
+</ion-content>
