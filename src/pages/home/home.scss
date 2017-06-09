@@ -1,6 +1,21 @@
 page-home {
+  font-size: 18px;
+
   .zIndexHack {
     z-index: 1000;
+  }
+
+  fill-height {
+    display: flex;
+    flex-direction: column;
+  }
+
+  ion-grid {
+    height: 100%;
+  }
+
+  ion-select {
+    max-width: 100%;
   }
 }
 

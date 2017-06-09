@@ -5,6 +5,12 @@ import { Injectable } from '@angular/core';
 export class SettingsService {
   private tips: number[] = [];
   private activeTip: number;
+
+  private minTax: number = 8;
+  private maxTax: number = 9;
+  private taxStep: number = 0.25;
+  private currentTax: number;
+
   private taxes: number[] = [];
   private activeTax: number;
 
@@ -41,7 +47,27 @@ export class SettingsService {
       );
   }
 
-  getTaxButtons() {
+  getMinTax() {
+    return this.storage.get('minTax')
+      .then(
+        (minTax) => {
+          this.minTax = minTax;
+          return this.minTax;
+        }
+      );
+  }
+
+  getMaxTax() {
+    return this.storage.get('maxTax')
+      .then(
+        (maxTax) => {
+          this.maxTax = maxTax;
+          return this.maxTax;
+        }
+      );
+  }
+
+  getTaxes() {
     return this.storage.get('taxes')
       .then(
         (taxes) => {
@@ -51,8 +77,8 @@ export class SettingsService {
       );
   }
 
-  setActiveTax(index: number) {
-    this.activeTax = index;
+  setActiveTax(tax: number) {
+    this.activeTax = tax;
     this.storage.set('activeTax', this.activeTax);
   }
 
@@ -67,15 +93,21 @@ export class SettingsService {
   }
 
   saveSettings(tipButtons: number[], activeTip: number,
-               taxButtons: number[], activeTax: number) {
+               minTax: number, maxTax: number) {
     this.tips = tipButtons;
     this.storage.set('tips', this.tips);
     this.activeTip = activeTip;
     this.storage.set('activeTip', this.activeTip);
 
-    this.taxes = taxButtons;
+    this.minTax = +minTax;
+    this.storage.set('minTax', this.minTax);
+    this.maxTax = +maxTax;
+    this.storage.set('maxTax', this.maxTax);
+    this.taxes = [];
+    for (var i = this.minTax; i <= this.maxTax; i += 0.25) {
+      this.taxes.push(i);
+    }
     this.storage.set('taxes', this.taxes);
-    this.activeTax = activeTax;
-    this.storage.set('activeTax', this.activeTax);
+    this.setActiveTax(this.minTax);
   }
 }

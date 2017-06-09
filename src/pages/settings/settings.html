@@ -8,23 +8,14 @@
 
 
 <ion-content padding>
-  <form name="taxForm" (ngSubmit)="addTax(g.value); g.reset();" #g="ngForm">
-    <div class="button-bar">
-      <label>Tax</label>
-      <button ion-button
-        type = "button"
-        *ngFor="let tax of taxes; let i = index"
-        (click)="setActiveTax(i)"
-        [outline]="i != activeTax">
-        {{tax | number: '1.2-2'}}
-      </button>
-    </div>
-    <div>
-      <ion-input type="number" name="percentage" ngModel required></ion-input>
-      <button ion-button type="submit" [disabled]="g.invalid">Add tax</button>
-    </div>
-    <button ion-button type="reset" (click)="clearTaxes()">Clear taxes</button>
-  </form>
+  <ion-item>
+    <ion-label>Min tax</ion-label>
+    <ion-input type="number" [(ngModel)]="minTax"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Max tax</ion-label>
+    <ion-input type="number" [(ngModel)]="maxTax"></ion-input>
+  </ion-item>
 
   <form name="tipForm" (ngSubmit)="addTip(f.value); f.reset();" #f="ngForm">
     <div class="button-bar">

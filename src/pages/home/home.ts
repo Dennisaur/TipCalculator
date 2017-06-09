@@ -9,12 +9,17 @@ import { SettingsService } from '../../services/settings.service';
 })
 
 export class HomePage {
-  subtotal: number = 100;
+  subtotal: number = 0;
   subtotalString: string;
 
   taxes: number[] = [];
   activeTax: number = 0;
   taxAmount: number;
+
+  currentTax: number;
+  allTaxes: number[] = [];
+  minTax: number = 0;
+  maxTax: number = 15;
 
   total: number = 0;
   totalString: string;
@@ -31,6 +36,10 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, private settingsService: SettingsService) {
 
+    for (var i = this.minTax; i <= this.maxTax; i += 0.25) {
+      this.allTaxes.push(i);
+    }
+
   }
 
   ionViewWillEnter() {
@@ -43,7 +52,7 @@ export class HomePage {
         (activeTip) => this.activeTip = activeTip
       );
 
-    this.settingsService.getTaxButtons()
+    this.settingsService.getTaxes()
       .then(
         (taxes) => this.taxes = taxes
       );
@@ -59,8 +68,7 @@ export class HomePage {
     this.navCtrl.push(SettingsPage);
   }
 
-  setActiveTax(index: number) {
-    this.activeTax = index;
+  taxChanged() {
     this.settingsService.setActiveTax(this.activeTax);
     this.updateAmountDue();
   }
@@ -107,7 +115,7 @@ export class HomePage {
   updateAmountDue() {
     // If we last changed the total amount, update subtotal and tax accordingly
     if (this.totalLastChanged) {
-      this.subtotal = this.total / (1 + this.taxes[this.activeTax] / 100);
+      this.subtotal = this.total / (1 + this.activeTax / 100);
       this.subtotalString = (+this.subtotal).toFixed(2);
       this.subtotal = +this.subtotalString;
       this.taxAmount = this.total * 1 - this.subtotal * 1;
@@ -117,7 +125,7 @@ export class HomePage {
     else {
       this.subtotalString = (+this.subtotal).toFixed(2);
       this.subtotal = +this.subtotalString;
-      this.taxAmount = +(this.subtotal * this.taxes[this.activeTax] / 100).toFixed(2);
+      this.taxAmount = +(this.subtotal * this.activeTax / 100).toFixed(2);
       this.total = this.subtotal * 1 + this.taxAmount * 1;
       this.totalString = (+this.total).toFixed(2);
       this.total = +this.totalString;

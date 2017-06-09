@@ -17,7 +17,8 @@ export class SettingsPage {
   tips : number[] = [];
   activeTip : number = 0;
   taxes : number[] = [];
-  activeTax : number = 0;
+  minTax: number;
+  maxTax: number;
 
   constructor(public navCtrl: NavController, private settingsService: SettingsService) {
   }
@@ -27,9 +28,13 @@ export class SettingsPage {
       .then(
         (tips) => this.tips = tips
       );
-    this.settingsService.getTaxButtons()
+    this.settingsService.getMinTax()
       .then(
-        (taxes) => this.taxes = taxes
+        (minTax) => this.minTax = minTax
+      );
+    this.settingsService.getMaxTax()
+      .then(
+        (maxTax) => this.maxTax = maxTax
       );
   }
 
@@ -65,34 +70,8 @@ export class SettingsPage {
     this.tips = [];
   }
 
-  addTax(value: any) {
-    let insertAt = 0;
-    for (let tax of this.taxes) {
-      // Button already exists
-      if (+tax == value.percentage) {
-        return -1;
-      }
-      // New tax amount should be inserted here
-      if (value.percentage < +tax) {
-        break;
-      }
-      insertAt++;
-    }
-
-    this.taxes.splice(insertAt, 0, value.percentage);
-    this.setActiveTax(insertAt);
-  }
-
-  setActiveTax(index: number) {
-    this.activeTax = index;
-  }
-
-  clearTaxes() {
-    this.taxes = [];
-  }
-
   saveSettings() {
-    this.settingsService.saveSettings(this.tips, this.activeTip, this.taxes, this.activeTax);
+    this.settingsService.saveSettings(this.tips, this.activeTip, this.minTax, this.maxTax);
     this.back();
   }
 
