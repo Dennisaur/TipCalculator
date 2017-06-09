@@ -13,46 +13,73 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label>Subtotal</ion-label>
-    <ion-input type="string" [(ngModel)]="subtotalString" (ngModelChange)="onSubtotalChange($event)" clearInput></ion-input>
+    <ion-label text-right>Subtotal</ion-label>
+    <ion-input type="string" text-right clearOnEdit
+      [(ngModel)]="subtotalString"
+      (ngModelChange)="onSubtotalChange($event)"
+      placeholder="0.00">
+    </ion-input>
   </ion-item>
 
-  <ion-item>
-    <div class="button-bar">
-      <label>Tax</label>
-      <button ion-button
-        *ngFor="let tax of taxes; let i = index"
-        (click)="setActiveTax(i)"
-        [outline]="i != activeTax"
-        class="button">
-        {{tax | number:'1.2-2'}}
-      </button>
-      <label type="number" ion-label style="float: right">{{taxAmount | number:'1.2-2'}}</label>
-    </div>
+  <ion-item text-wrap>
+    <ion-label item-left>Tax</ion-label>
+
+    <button hideWhen="android" ion-button item-left
+      *ngFor="let tax of taxes; let i = index"
+      (click)="setActiveTax(i)"
+      [outline]="i != activeTax">
+      {{tax | number:'1.2-2'}}
+    </button>
+
+    <button showWhen="android" ion-button item-left
+      class="zIndexHack"
+      *ngFor="let tax of taxes; let i = index"
+      (click)="setActiveTax(i)"
+      [outline]="i != activeTax">
+      {{tax | number:'1.2-2'}}
+    </button>
+    <ion-input readonly text-right
+      [ngModel]="taxAmount | number:'1.2-2'"
+      placeholder="0.00"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label>Total</ion-label>
-    <ion-input type="string" [(ngModel)]="totalString" (ngModelChange)="onTotalChange($event)" clearInput></ion-input>
+    <ion-input type="string" text-right clearOnEdit
+      [(ngModel)]="totalString"
+      (ngModelChange)="onTotalChange($event)"
+      placeholder="0.00">
+    </ion-input>
   </ion-item>
 
   <ion-item>
-    <div class="button-bar">
-      <label>Tip</label>
-      <button ion-button
-        *ngFor="let tip of tips; let i = index"
-        (click)="setActiveTip(i)"
-        [outline]="i != activeTip"
-        class="button">
-        {{tip}}
-      </button>
-      <label ion-label style="float: right">{{tipAmount | number:'1.2-2'}}</label>
-    </div>
+    <ion-label>Tip</ion-label>
+
+    <button hideWhen="android" ion-button item-content
+      *ngFor="let tip of tips; let i = index"
+      (click)="setActiveTip(i)"
+      [outline]="i != activeTip">
+      {{tip}}
+    </button>
+
+    <button showWhen="android" ion-button item-content
+      class="zIndexHack"
+      *ngFor="let tip of tips; let i = index"
+      (click)="setActiveTip(i)"
+      [outline]="i != activeTip">
+      {{tip}}
+    </button>
+
+    <ion-input text-right readonly item-content
+    [ngModel]="tipAmount | number:'1.2-2'"
+    placeholder="0.00"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label>Amount due</ion-label>
-    <ion-label right>{{amountDue | number:'1.2-2'}}</ion-label>
+    <ion-input readonly text-right
+      [ngModel]="amountDue | number:'1.2-2'"
+      placeholder="0.00"></ion-input>
   </ion-item>
 
   <ion-item>

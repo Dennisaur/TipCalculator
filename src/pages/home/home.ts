@@ -9,22 +9,22 @@ import { SettingsService } from '../../services/settings.service';
 })
 
 export class HomePage {
-  subtotal: number = 0;
-  subtotalString: string = "0.00";
+  subtotal: number = 100;
+  subtotalString: string;
 
   taxes: number[] = [];
   activeTax: number = 0;
-  taxAmount: number = 0;
+  taxAmount: number;
 
   total: number = 0;
-  totalString: string = "0.00";
+  totalString: string;
   totalLastChanged: boolean = false;
 
   tips: number[] = [];
   activeTip: number = 0;
-  tipAmount: number = 0;
+  tipAmount: number;
 
-  amountDue: number = 0;
+  amountDue: number;
 
   persons: number = 1;
   perPersonAmount: number = 0;
@@ -51,6 +51,8 @@ export class HomePage {
       .then(
         (activeTax) => this.activeTax = activeTax
       );
+
+    let updateAmount = setTimeout(() => {this.updateAmountDue();}, 300);
   }
 
   onLoadSettings() {
@@ -113,6 +115,8 @@ export class HomePage {
     }
     // If we last changed the subtotal amount, update total and tax accordingly
     else {
+      this.subtotalString = (+this.subtotal).toFixed(2);
+      this.subtotal = +this.subtotalString;
       this.taxAmount = +(this.subtotal * this.taxes[this.activeTax] / 100).toFixed(2);
       this.total = this.subtotal * 1 + this.taxAmount * 1;
       this.totalString = (+this.total).toFixed(2);
@@ -127,9 +131,6 @@ export class HomePage {
     // Calculate split cost based on persons count
     this.perPersonAmount = +((+this.amountDue / this.persons).toFixed(2));
 
-
-    console.log("Taxes: " + this.taxes.length + " " + this.activeTax);
-    console.log("Tips: " + this.tips.length + " " + this.activeTip);
   }
 
   onPersonsChange() {

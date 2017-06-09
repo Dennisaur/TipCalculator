@@ -1,4 +1,7 @@
 page-home {
+  .zIndexHack {
+    z-index: 1000;
+  }
 }
 
 input[type=number]::-webkit-outer-spin-button {

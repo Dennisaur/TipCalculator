@@ -16,7 +16,7 @@
         *ngFor="let tax of taxes; let i = index"
         (click)="setActiveTax(i)"
         [outline]="i != activeTax">
-        {{tax}}
+        {{tax | number: '1.2-2'}}
       </button>
     </div>
     <div>
