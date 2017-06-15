@@ -12,13 +12,14 @@
 </ion-header>
 
 <ion-content class="fill-height" padding>
-  <ion-grid>
+  <ion-grid class="receipt" padding>
+    <!--ion-row [hidden]="!tipSubtotal"-->
     <ion-row>
-      <ion-col col-6>
-        <ion-label>Subtotal</ion-label>
+      <ion-col col-7>
+        <ion-label>Subtotal:</ion-label>
       </ion-col>
-      <ion-col col-6>
-        <ion-input type="string" text-right clearOnEdit
+      <ion-col col-5>
+        <ion-input type="number" text-right clearOnEdit
           [(ngModel)]="subtotalString"
           (ngModelChange)="onSubtotalChange($event)"
           placeholder="0.00">
@@ -26,12 +27,14 @@
       </ion-col>
     </ion-row>
 
+    <!--ion-row [hidden]="!tipSubtotal"-->
     <ion-row>
       <ion-col col-3>
-        <ion-label>Tax</ion-label>
+        <ion-label>Tax:</ion-label>
       </ion-col>
       <ion-col col-5>
-        <ion-select interface="popover"
+        <ion-select
+          [selectOptions]="taxSelectOptions"
           [(ngModel)]="activeTax"
           (ionChange)="taxChanged()">
           <ion-option
@@ -49,11 +52,11 @@
     </ion-row>
 
     <ion-row>
-      <ion-col col-6>
-        <ion-label>Total</ion-label>
+      <ion-col col-7>
+        <ion-label>Total:</ion-label>
       </ion-col>
-      <ion-col col-6>
-        <ion-input type="string" text-right clearOnEdit
+      <ion-col col-5>
+        <ion-input type="number" text-right clearOnEdit
           [(ngModel)]="totalString"
           (ngModelChange)="onTotalChange($event)"
           placeholder="0.00">
@@ -61,9 +64,47 @@
       </ion-col>
     </ion-row>
 
+    <ion-row hidden>
+      <ion-col col-3>
+        <ion-label>Tip:</ion-label>
+      </ion-col>
+      <ion-col col-9>
+        <ion-grid fixed style="width: 100%">
+          <ion-row  style="width: 100%" nowrap justify-content-between>
+            <ion-col *ngFor="let tip of tips; let i = index" class="no-padding">
+              <button ion-button style="width:90%"
+                (click)="setActiveTip(i)"
+                [outline]="i != activeTip">
+                {{tip}}%
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+
+    <ion-row hidden>
+      <ion-col col-7></ion-col>
+      <ion-col col-5>
+        <ion-input text-right readonly
+          class="bottom-border"
+          [ngModel]="tipAmount | number:'1.2-2'"
+          placeholder="0.00"></ion-input>
+      </ion-col>
+    </ion-row>
+
+    <ion-row nowrap justify-content-between>
+      <ion-col *ngFor="let tip of tips; let i = index" class="no-padding">
+        <button ion-button style="width:90%"
+          (click)="setActiveTip(i)"
+          [outline]="i != activeTip">
+          {{tip}}%
+        </button>
+      </ion-col>
+    </ion-row>
     <ion-row>
-      <ion-col col-6>
-        <ion-label>Tip</ion-label>
+      <ion-col col-7>
+        <ion-label>Tip:</ion-label>
       </ion-col>
       <!--ion-col col-3>
         <button hideWhen="android" ion-button
@@ -83,47 +124,43 @@
           </ion-row>
         </ion-grid>
       </ion-col-->
-      <ion-col col-6>
+      <ion-col col-5>
         <ion-input text-right readonly
+          class="bottom-border"
           [ngModel]="tipAmount | number:'1.2-2'"
           placeholder="0.00"></ion-input>
       </ion-col>
     </ion-row>
 
     <ion-row>
-      <ion-col *ngFor="let tip of tips; let i = index">
-        <button ion-button style="width:100%"
-          (click)="setActiveTip(i)"
-          [outline]="i != activeTip">
-          {{tip}}%
-        </button>
+      <ion-col col-7>
+        <ion-label>Amount due:</ion-label>
       </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col col-6>
-        <ion-label>Amount due</ion-label>
-      </ion-col>
-      <ion-col col-6>
+      <ion-col col-5>
         <ion-input readonly text-right
+          class="bottom-border"
           [ngModel]="amountDue | number:'1.2-2'"
           placeholder="0.00"></ion-input>
       </ion-col>
     </ion-row>
+  </ion-grid>
 
+  <ion-grid class="split">
     <ion-row>
-      <ion-col col-6>
-        <ion-label>Persons: {{persons}} </ion-label>
+      <ion-col col-5 class="image-parent">
+        <img src="img/personsCount.png" height=36 width=36 style="vertical-align: top"/>
+        <span class="split-font">{{persons}}</span>
       </ion-col>
-      <ion-col col-6>
-        <ion-label text-right>{{perPersonAmount | number:'1.2-2'}}</ion-label>
+      <ion-col col-7>
+        <ion-label text-right class="split-font">{{perPersonAmount | number:'1.2-2'}}</ion-label>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-range style="width:100%" [(ngModel)]="persons" (ngModelChange)="onPersonsChange()"
+      <ion-range text-middle class="persons-range" [(ngModel)]="persons" (ngModelChange)="onPersonsChange()"
         min=1 max=12 snaps>
       </ion-range>
     </ion-row>
+
   </ion-grid>
 
 </ion-content>

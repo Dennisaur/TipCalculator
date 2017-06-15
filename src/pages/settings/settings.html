@@ -8,35 +8,39 @@
 
 
 <ion-content padding>
-  <ion-item>
-    <ion-label>Min tax</ion-label>
-    <ion-input type="number" [(ngModel)]="minTax"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label>Max tax</ion-label>
-    <ion-input type="number" [(ngModel)]="maxTax"></ion-input>
-  </ion-item>
+  <form #form="ngForm" (ngSubmit)="saveSettings(form.value)">
+    <ion-item>
+      <ion-label>Tip on subtotal</ion-label>
+      <ion-toggle name="tipSubtotal" [(ngModel)]="tipSubtotal"></ion-toggle>
+    </ion-item>
 
-  <form name="tipForm" (ngSubmit)="addTip(f.value); f.reset();" #f="ngForm">
-    <div class="button-bar">
-      <label>Tip</label>
-      <button ion-button
-        type="button"
-        *ngFor="let tip of tips; let i = index;"
-        (click)="setActiveTip(i)"
-        [outline]="i != activeTip">
-        {{tip}}
-      </button>
-    </div>
-    <div>
-      <ion-input type="number" name="percentage" ngModel required></ion-input>
-      <button ion-button type="submit" [disabled]="f.invalid">Add tip</button>
-    </div>
-    <button ion-button type="reset" (click)="clearTips()">Clear tips</button>
+    <!--ion-item [hidden]="!tipSubtotal"-->
+    <ion-item>
+      <ion-label>Min tax</ion-label>
+      <ion-input text-right type="number" [max]="maxTax" name="minTax" [(ngModel)]="minTax"></ion-input>
+    </ion-item>
+    <!--ion-item [hidden]="!tipSubtotal"-->
+    <ion-item>
+      <ion-label>Max tax</ion-label>
+      <ion-input text-right type="number" [min]="minTax" name="maxTax" [(ngModel)]="maxTax"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Custom tip</ion-label>
+      <ion-input text-right type="number" min="0" max="100" name="customTip" [(ngModel)]="customTip"></ion-input>
+    </ion-item>
+
+    <ion-footer no-border>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6>
+            <button ion-button style="width: 100%" text-right type="button" (click)="back()">Cancel</button>
+          </ion-col>
+          <ion-col col-6>
+            <button ion-button style="width: 100%" type="submit" [disabled]="form.invalid">Save</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-footer>
   </form>
-
-  <div>
-    <button ion-button (click)="saveSettings()">Save</button>
-    <button ion-button (click)="back()">Cancel</button>
-  </div>
 </ion-content>

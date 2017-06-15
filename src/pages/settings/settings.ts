@@ -14,19 +14,23 @@ import { SettingsService } from '../../services/settings.service';
   templateUrl: 'settings.html',
 })
 export class SettingsPage {
+  tipSubtotal: boolean = false;
   tips : number[] = [];
   activeTip : number = 0;
+  customTip: number;
   taxes : number[] = [];
   minTax: number;
   maxTax: number;
 
-  constructor(public navCtrl: NavController, private settingsService: SettingsService) {
+  constructor(public navCtrl: NavController,
+              private settingsService: SettingsService) {
+
   }
 
   ionViewWillEnter() {
-    this.settingsService.getTipButtons()
+    this.settingsService.getTipSubtotal()
       .then(
-        (tips) => this.tips = tips
+        (tipSubtotal) => this.tipSubtotal = tipSubtotal
       );
     this.settingsService.getMinTax()
       .then(
@@ -36,13 +40,24 @@ export class SettingsPage {
       .then(
         (maxTax) => this.maxTax = maxTax
       );
+    this.settingsService.getCustomTip()
+      .then(
+        (customTip) => this.customTip = customTip
+      );
+    this.settingsService.getTips()
+      .then(
+        (tips) => this.tips = tips
+      );
   }
 
   addTip(value: any) {
+    this.tips = [15, 18, 20];
+
     // Prevent negative values
-    if (value.percentage < 0) {
+    if (!value.percentage || value.percentage < 0) {
       return -1;
     }
+
 
     let insertAt = 0;
     for (let tip of this.tips) {
@@ -70,8 +85,10 @@ export class SettingsPage {
     this.tips = [];
   }
 
-  saveSettings() {
-    this.settingsService.saveSettings(this.tips, this.activeTip, this.minTax, this.maxTax);
+  saveSettings(form: any) {
+    this.addTip({percentage: form.customTip});
+    this.settingsService.saveSettings(form.tipSubtotal, form.customTip,
+      this.tips, this.activeTip, form.minTax, form.maxTax);
     this.back();
   }
 

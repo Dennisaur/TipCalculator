@@ -10,12 +10,84 @@ page-home {
     flex-direction: column;
   }
 
-  ion-grid {
-    height: 100%;
+  .scroll-content {
+    padding-top: 0px !important;
+    overflow: hidden;
   }
 
+  .receipt {
+    background: #F8F8F8;
+    -webkit-filter: drop-shadow(rgba(0, 0, 0, .8) 0px 1px 1px);
+    margin-bottom: 8px;
+  }
+
+  .split {
+    background: #FFF;
+    padding: 0px;
+  }
+  .split:before {
+    background:
+      linear-gradient(
+        45deg, transparent 33.33%,
+        #FFF 33.33%, #FFF 66.67%,
+        transparent 66.67%
+      ),
+      linear-gradient(
+        -45deg, transparent 33.33%,
+        #FFF 33.33%, #FFF 66.67%,
+        transparent 66.67%
+      );
+    background-size: 8px 32px;
+  }
+
+  ion-row {
+    align-items: center;
+    overflow: hidden;
+  }
+  .col.no-padding{
+    padding: 0px;
+  }
   ion-select {
     max-width: 100%;
+  }
+
+  .bottom-border {
+    border-bottom: 1px solid black;
+  }
+  
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
+  }
+
+  .split-font {
+    font-size: 32px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .zigzag {
+    position: relative;
+    width: 100%;
+  }
+  .zigzag:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -8px;
+    width: 100%;
+    height: 8px;
+    -webkit-filter: drop-shadow(rgba(0, 0, 0, .8) 0px 1px 3px);
+  }
+
+  .persons-range {
+    width: 90%;
+    padding-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

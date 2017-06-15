@@ -4,11 +4,18 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
+import { CloduSettings, CloudModule } from '@ionic/cloud-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SettingsPage } from '../pages/settings/settings';
 import { SettingsService } from '../services/settings.service';
+
+const cloudSettings: CloudSettings = {
+	'core': {
+		'app_id': 'e690dc59'
+	}
+};
 
 @NgModule({
   declarations: [
@@ -19,7 +26,8 @@ import { SettingsService } from '../services/settings.service';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+	ClodModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -9,12 +9,15 @@ import { SettingsService } from '../../services/settings.service';
 })
 
 export class HomePage {
+  tipSubtotal: boolean;
+
   subtotal: number = 0;
   subtotalString: string;
 
   taxes: number[] = [];
   activeTax: number = 0;
   taxAmount: number;
+  taxSelectOptions: {} = {title: 'Tax Rate'};
 
   currentTax: number;
   allTaxes: number[] = [];
@@ -43,10 +46,17 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    this.settingsService.getTipButtons()
+    this.settingsService.getTipSubtotal()
+      .then(
+        (tipSubtotal) => this.tipSubtotal = tipSubtotal
+      );
+
+
+    this.settingsService.getTips()
       .then(
         (tips) => this.tips = tips
       );
+
     this.settingsService.getActiveTip()
       .then(
         (activeTip) => this.activeTip = activeTip
@@ -61,7 +71,7 @@ export class HomePage {
         (activeTax) => this.activeTax = activeTax
       );
 
-    let updateAmount = setTimeout(() => {this.updateAmountDue();}, 300);
+    let updateAmount = setTimeout(() => {this.updateAmountDue();}, 500);
   }
 
   onLoadSettings() {
@@ -132,7 +142,13 @@ export class HomePage {
     }
 
     // Calculate tip and total amount due
-    this.tipAmount = +(this.subtotal * this.tips[this.activeTip] / 100).toFixed(2);
+    if (this.tipSubtotal) {
+      this.tipAmount = +(this.subtotal * this.tips[this.activeTip] / 100).toFixed(2);
+    }
+    else {
+      this.tipAmount = +(this.total * this.tips[this.activeTip] / 100).toFixed(2);
+    }
+
     this.amountDue = this.total * 1 + this.tipAmount * 1;
     this.amountDue = +this.amountDue.toFixed(2);
 
